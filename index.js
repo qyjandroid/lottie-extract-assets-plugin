@@ -10,7 +10,7 @@ class LottieExtractAssetsPlugin {
     constructor (options) {
     	// 获取插件配置项
         this.filePath = options && options.path ? options.path : "";
-        this.outFileName= options && options.outFileName ? options.outFileName : "lottie-assets.json";
+        this.outFileName= options && options.outFileName ? options.outFileName : "lottie-assets.js";
     }
 
     getLink= async(lottieConfig)=>{
@@ -52,7 +52,7 @@ class LottieExtractAssetsPlugin {
                 });
             });
           const imgLink=await this.getLink(lottieConfig);
-          let content=JSON.stringify(imgLink);
+          let content="window._config = "+ JSON.stringify(imgLink)+";";
           compilation.assets[this.outFileName] = {
               // 写入新文件的内容
               source: function() {
