@@ -21,17 +21,30 @@ class LottieExtractAssetsPlugin {
 
     compilationHook(compilation) {
         const pluginName = this.constructor.name;
-        console.log("compilationHook");
-        //添加资源
-        compilation.hooks.processAssets.tapAsync({ name: pluginName, stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS }, async (assets, cb) => {
-            console.log("LottieExtractAssetsPlugin:assets=", assets);
-            if (this.configPath) {
-                await this.readJsonFile(this.configPath, assets);
-                cb();
-            } else {
-                cb();
-            }
-        });
+        if(compilation.hooks.processAssets){
+            //compilation.emitAsset(name, new webpack.sources.RawSource(html, false));
+           // 添加资源
+            compilation.hooks.processAssets.tapAsync({ name: pluginName, stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS }, async (assets, cb) => {
+                if (this.configPath) {
+                    await this.readJsonFile(this.configPath, assets);
+                    cb();
+                } else {
+                    cb();
+                }
+            });
+        }else if(compilation.hooks.additionalAssets){
+            compilation.hooks.additionalAssets.tapAsync( pluginName,  async (cb) => {
+                if (this.configPath) {
+                    await this.readJsonFile(this.configPath, compilation.assets);
+                    cb();
+                } else {
+                    cb();
+                }
+            });
+        }else{
+            //throw new Error("请升级webpack版本>=4");
+            compilation.errors.push("请升级webpack版本>=4");
+        } 
     }
     
     /**
@@ -181,11 +194,14 @@ class LottieExtractAssetsPlugin {
     apply(compiler) {
         const pluginName=this.constructor.name;
         if(compiler.hooks){
+            // Webpack 4+ Plugin System
             //TODO 使用该hooks目前可以满足需求，但是会警告，后期查看webpack具体生命周期，替换。
             compiler.hooks.compilation.tap(pluginName, (compilation, compilationParams) => {
                 //注意注册事件时机。
                 this.compilationHook(compilation);
             });
+        }else{
+            compilation.errors.push("请升级webpack版本>=4");
         }
     }
   }
