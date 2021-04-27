@@ -12,6 +12,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new LottieExtractAssetsPlugin({path:"./lottieConfig.json"})
+    new LottieExtractAssetsPlugin({configPath:"./lottieConfig.json",outFileName:"lottie-assets.js",globalName:"window._config"})
   ]
 }
