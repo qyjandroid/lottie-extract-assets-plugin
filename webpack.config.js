@@ -2,7 +2,8 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const LottieExtractAssetsPlugin=require("./src/plugins/index.js");
 const assert = require('assert');
-const fs = require('fs');
+
+const to=path.join("lottie", "test");
 
 module.exports = {
   entry: './src/index.js',
@@ -12,6 +13,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new LottieExtractAssetsPlugin({configPath:"./lottieConfig.json",outFileName:"lottie-assets.js",globalName:"window._config"})
+    new LottieExtractAssetsPlugin({configPath:"./lottieConfig.json",to:to,outFileName:"lottie-assets.js",globalName:"window._config"})
   ]
 }

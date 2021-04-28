@@ -1,6 +1,6 @@
 {
     "name": "lottie-extract-assets-plugin",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "lottie资源提取，生成json文件",
     "main": "index.js",
     "scripts": {

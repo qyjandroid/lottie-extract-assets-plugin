@@ -17,6 +17,7 @@ class LottieExtractAssetsPlugin {
         this.outFileName = options && options.outFileName ? options.outFileName : "lottie-assets.js";
         //生成资源文件的全局名称
         this.globalName = options && options.globalName ? options.globalName : "window._config";
+        this.to = options && options.to ? options.to : "dist";
     }
 
     compilationHook(compilation) {
@@ -119,7 +120,8 @@ class LottieExtractAssetsPlugin {
                 return content.length;
             }
         }
-        assets[this.outFileName]= assetsInfo;
+        const fileName = path.join(this.to, this.outFileName);
+        assets[fileName]= assetsInfo;
     }
     /**
      * 
