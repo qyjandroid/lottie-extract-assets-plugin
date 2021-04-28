@@ -105,7 +105,12 @@ class LottieExtractAssetsPlugin {
             } catch (e) {
                 reject(e);
             }
+        }).catch(()=>{
+            console.warn("读取配置文件错误:"+assetPath);
         });
+        if(!lottieConfig){
+            return;
+        }
         //根据配置获取资源链接(包含当前的lottie和lottie中图片)
         const imgLink = await this.getLink(lottieConfig);
         // 采用js文件，方便我们前端代码集成使用。
