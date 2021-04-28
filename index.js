@@ -17,7 +17,6 @@ class LottieExtractAssetsPlugin {
         this.outFileName = options && options.outFileName ? options.outFileName : "lottie-assets.js";
         //生成资源文件的全局名称
         this.globalName = options && options.globalName ? options.globalName : "window._config";
-
         this.to = options && options.to ? options.to : "dist";
     }
 
@@ -106,7 +105,12 @@ class LottieExtractAssetsPlugin {
             } catch (e) {
                 reject(e);
             }
+        }).catch(()=>{
+            console.warn("读取配置文件错误:"+assetPath);
         });
+        if(!lottieConfig){
+            return;
+        }
         //根据配置获取资源链接(包含当前的lottie和lottie中图片)
         const imgLink = await this.getLink(lottieConfig);
         // 采用js文件，方便我们前端代码集成使用。
